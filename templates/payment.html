@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upgrade to Premium</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .payment-container {
+            background-color: white;
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 450px;
+            text-align: center;
+            border-top: 4px solid #6772e5;
+        }
+
+        .payment-container h2 {
+            color: #32325d;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+        }
+
+        .payment-container p {
+            color: #525f7f;
+            margin-bottom: 1.25rem;
+            line-height: 1.6;
+        }
+
+        .price-tag {
+            font-size: 1.5rem;
+            color: #24b47e;
+            font-weight: 600;
+            margin: 1.5rem 0;
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            background: rgba(36, 180, 126, 0.1);
+            border-radius: 50px;
+        }
+
+        .btn-stripe {
+            background-color: #6772e5;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-stripe:hover {
+            background-color: #5469d4;
+            transform: translateY(-2px);
+            box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1);
+        }
+
+        .benefits {
+            text-align: left;
+            margin: 2rem 0;
+            padding-left: 1rem;
+        }
+
+        .benefits li {
+            margin-bottom: 0.75rem;
+            color: #525f7f;
+            position: relative;
+            padding-left: 1.75rem;
+        }
+
+        .benefits li:before {
+            content: "✓";
+            color: #24b47e;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="payment-container">
+        <h2>Upgrade to Premium Account</h2>
+        
+        <p>Unlock unlimited messaging and premium features with a one-time payment.</p>
+        
+        <div class="price-tag">$5.00</div>
+        
+        <ul class="benefits">
+            <li>Unlimited messages</li>
+            <li>Priority customer support</li>
+            <li>Ad-free experience</li>
+            <li>Premium badge on your profile</li>
+        </ul>
+
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn-stripe">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16" style="margin-right: 10px; vertical-align: middle;">
+                    <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.226 7.092c-.382.422-.675.71-.79.775-.116.065-.257.098-.423.098-.166 0-.307-.033-.423-.098-.115-.065-.408-.353-.79-.775l-.133-.151-.151.133c-.382.422-.675.71-.79.775-.116.065-.257.098-.423.098-.166 0-.307-.033-.423-.098-.115-.065-.408-.353-.79-.775l-.8-.888.8-.888c.382-.422.675-.71.79-.775.116-.065.257-.098.423-.098.166 0 .307.033.423.098.115.065.408.353.79.775l.133.151.151-.133c.382-.422.675-.71.79-.775.116-.065.257-.098.423-.098.166 0 .307.033.423.098.115.065.408.353.79.775l.8.888-.8.888z"/>
+                </svg>
+                Pay with Stripe
+            </button>
+        </form>
+        
+        <p style="margin-top: 1.5rem; font-size: 0.9rem; color: #8898aa;">
+            Secure payment processing powered by Stripe
+        </p>
+    </div>
+</body>
+</html>

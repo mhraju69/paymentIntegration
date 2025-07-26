@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Chat</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- FontAwesome Icons -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary-color: #6366f1;
+      --primary-hover: #4f46e5;
+      --secondary-color: #f9fafb;
+      --text-color: #1f2937;
+      --text-light: #6b7280;
+      --bg-color: #f3f4f6;
+      --message-bg: #ffffff;
+      --current-user-bg: #6366f1;
+      --other-user-bg: #e5e7eb;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+    }
+
+    .chat-container {
+      max-width: 800px;
+      max-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chat-header {
+      background-color: var(--primary-color);
+      color: white;
+      border-radius: 12px 12px 0 0;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .chat-body {
+      flex: 1;
+      overflow-y: auto;
+      max-height: 70vh;
+      background-color: var(--message-bg);
+      background-image: radial-gradient(circle at 1px 1px, #e5e7eb 1px, transparent 0);
+      background-size: 20px 20px;
+      padding: 20px;
+    }
+
+    .chat-footer {
+      background-color: white;
+      border-radius: 0 0 12px 12px;
+      box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    .message-container {
+      max-width: 70%;
+      margin-bottom: 16px;
+    }
+
+    .current-user {
+      margin-left: auto;
+    }
+
+    .other-user {
+      margin-right: auto;
+    }
+
+    .message-bubble {
+      padding: 12px 16px;
+      border-radius: 18px;
+      position: relative;
+      word-wrap: break-word;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .current-user .message-bubble {
+      background-color: var(--current-user-bg);
+      color: white;
+      border-bottom-right-radius: 4px;
+    }
+
+    .other-user .message-bubble {
+      background-color: var(--other-user-bg);
+      color: var(--text-color);
+      border-bottom-left-radius: 4px;
+    }
+
+    .message-time {
+      font-size: 0.75rem;
+      color: var(--text-light);
+      margin-top: 4px;
+    }
+
+    .current-user .message-time {
+      text-align: right;
+    }
+
+    .other-user .message-time {
+      text-align: left;
+    }
+
+    .chat-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin: 0 12px;
+      border: 2px solid white;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .message-input {
+      border-radius: 24px;
+      border: 1px solid #e5e7eb;
+      padding: 12px 20px;
+      transition: all 0.3s ease;
+    }
+
+    .message-input:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+    }
+
+    .send-button {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      transition: all 0.3s ease;
+    }
+
+    .send-button:hover {
+      background-color: var(--primary-hover);
+      transform: translateY(-2px);
+    }
+
+    .upgrade-notice {
+      background-color: #fff3f3;
+      border-left: 4px solid #ef4444;
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+    }
+
+    .empty-chat {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      color: var(--text-light);
+    }
+
+    .empty-chat i {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      opacity: 0.5;
+    }
+
+    /* Custom scrollbar */
+    .chat-body::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .chat-body::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 10px;
+    }
+
+    .chat-body::-webkit-scrollbar-thumb {
+      background: #c1c1c1;
+      border-radius: 10px;
+    }
+
+    .chat-body::-webkit-scrollbar-thumb:hover {
+      background: #a1a1a1;
+    }
+  </style>
+</head>
+<body>
+  <div class="container py-4">
+    <div class="row d-flex justify-content-center">
+      <div class="col-lg-8">
+        <div class="card border-0 shadow-lg overflow-hidden">
+          <!-- Chat Header -->
+          <div class="chat-header p-4 d-flex justify-content-between align-items-center">
+            <div>
+              <h4 class="mb-0 fw-semibold">Welcome to Chat</h4>
+              <p class="mb-0 small opacity-75">
+                {% if profile.is_premium %}
+                  <span class="badge bg-success">Premium User</span>
+                {% else %}
+                  <span class="badge bg-secondary">Free User</span>
+                {% endif %}
+              </p>
+            </div>
+            <button type="button" class="btn btn-light rounded-pill px-3">
+              <i class="fas fa-ellipsis-h"></i>
+            </button>
+          </div>
+
+          <!-- Chat Body -->
+          <div class="chat-body" id="chat-messages">
+            {% if messages %}
+              {% for msg in messages %}
+                {% if msg.user == request.user %}
+                  <!-- Current user's message -->
+                  <div class="message-container current-user">
+                    <div class="d-flex align-items-end justify-content-end">
+                      <div class="text-end me-2">
+                        <div class="message-bubble">
+                          {{ msg.content }}
+                        </div>
+                        <div class="message-time">
+                          {{ msg.timestamp|time:"H:i" }}
+                          {% if msg.read %}
+                            <i class="fas fa-check-double ms-1 text-info"></i>
+                          {% else %}
+                            <i class="fas fa-check ms-1 text-muted"></i>
+                          {% endif %}
+                        </div>
+                      </div>
+                      <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava4-bg.webp" alt="avatar" class="chat-avatar">
+                    </div>
+                  </div>
+                {% else %}
+                  <!-- Other user's message -->
+                  <div class="message-container other-user">
+                    <div class="d-flex align-items-end">
+                      <img src="{{ msg.user.profile.avatar.url }}" alt="avatar" class="chat-avatar">
+                      <div class="ms-2">
+                        <div class="message-bubble">
+                          <strong>{{ msg.user.username }}</strong>: {{ msg.content }}
+                        </div>
+                        <div class="message-time">
+                          {{ msg.timestamp|time:"H:i" }}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                {% endif %}
+              {% endfor %}
+            {% else %}
+              <!-- Empty chat state -->
+              <div class="empty-chat">
+                <i class="far fa-comment-dots"></i>
+                <h5>No messages yet</h5>
+                <p class="text-center">Start the conversation by sending your first message</p>
+              </div>
+            {% endif %}
+          </div>
+
+          <!-- Chat Footer -->
+          <div class="chat-footer p-3">
+            {% if profile.messages_sent >= profile.message_limit and not profile.is_premium %}
+              <div class="upgrade-notice">
+                <div class="d-flex justify-content-between align-items-center">
+                  <div>
+                    <strong>Message limit reached</strong>
+                    <p class="mb-0 small">Upgrade to premium to continue chatting</p>
+                  </div>
+                  <a href="{% url 'chat:payment' %}" class="btn btn-sm btn-danger rounded-pill px-3">
+                    Upgrade Now
+                  </a>
+                </div>
+              </div>
+            {% else %}
+              <form method="post" class="d-flex align-items-center">
+                {% csrf_token %}
+                <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava4-bg.webp" alt="avatar" class="chat-avatar">
+                <input type="text" name="message" class="form-control message-input flex-grow-1 mx-2" placeholder="Type your message..." required>
+                <button type="submit" class="send-button">
+                  <i class="fas fa-paper-plane"></i>
+                </button>
+              </form>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Auto-scroll to bottom of chat
+    window.onload = function() {
+      const chatMessages = document.getElementById('chat-messages');
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    };
+  </script>
+</body>
+</html>
