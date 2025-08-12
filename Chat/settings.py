@@ -16,6 +16,7 @@ from dotenv import load_dotenv
 load_dotenv()
 STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY")
 STRIPE_PUBLISHABLE_KEY = os.getenv("STRIPE_PUBLISHABLE_KEY")
+STRIPE_WEBHOOK_SECRET = os.getenv("STRIPE_WEBHOOK_SECRET")
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -31,7 +32,7 @@ SECRET_KEY = 'django-insecure-2y@m5r(yp9&!!9s924^#ic*v@app=z7ay)mgk_6$zh+66&mix%
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -46,7 +47,11 @@ INSTALLED_APPS = [
 
       'Chatbox',
 ]
+CSRF_TRUSTED_ORIGINS = [
+    'https://14413dc2e21d.ngrok-free.app',
+    "http://localhost:8000",
 
+]
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -130,3 +135,15 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
+LOGIN_REDIRECT_URL = ''
+LOGOUT_REDIRECT_URL = 'login'
+LOGIN_URL = 'login' 
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'drzraju@gmail.com'
+EMAIL_HOST_PASSWORD = 'rhod rlwj vhkn etrb'
+DEFAULT_FROM_EMAIL = 'drzraju@gmail.com'

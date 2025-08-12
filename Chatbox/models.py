@@ -20,6 +20,7 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     message_limit = models.IntegerField(default=20)  # ফ্রি মেসেজ সীমা
     messages_sent = models.IntegerField(default=0)
+    email = models.EmailField(null=True,blank=True)
     is_premium = models.BooleanField(default=False)
 
     def __str__(self):

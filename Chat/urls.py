@@ -20,7 +20,7 @@ from Chatbox.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',user_login, name='login'),
+    path('login/',user_login, name='login'),
     path("signup/", signup, name="signup"),
-    path("chat/", include("Chatbox.urls")),
+    path("", include('Chatbox.urls') , name="chatbox"),
 ]
